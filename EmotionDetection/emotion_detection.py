@@ -22,6 +22,21 @@ def emotion_detector(text_to_analyse):
             **emotions,
             'dominant_emotion': dominant_name
         }
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error {e.response.status_code}: {e}")
+        if e.response.status_code == 400:
+            return {
+                'anger': None,
+                'disgust': None,
+                'fear': None,
+                'joy': None,
+                'sadness': None,
+                'dominant_emotion': None
+            }
+        return {
+            'message': str(e),
+            'detail': e.response.text
+        }
     except requests.exceptions.RequestException as e:
         print(f"API call failed: {e}")
         return None
